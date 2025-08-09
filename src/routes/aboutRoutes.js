@@ -18,7 +18,7 @@ const upload = multer({
 // Get about information
 router.get('/', async (req, res) => {
     try {
-        const [rows] = await db.query<(About & RowDataPacket)[]>('SELECT * FROM about LIMIT 1');
+        const [rows] = await db.query('SELECT * FROM about LIMIT 1');
         res.json(rows[0] || {});
     } catch (error) {
         res.status(500).json({ error: 'Error fetching about information' });
@@ -78,14 +78,14 @@ router.put('/', upload.single('image'), async (req, res) => {
         // Check if the update was successful
         if (updateFields.length > 0) {
             // Fetch and return updated data
-            const [rows] = await db.query<(About & RowDataPacket)[]>('SELECT * FROM about WHERE id = 1');
+            const [rows] = await db.query('SELECT * FROM about WHERE id = 1');
             if (!rows || rows.length === 0) {
                 return res.status(404).json({ error: 'About information not found' });
             }
             res.json(rows[0]);
         } else {
             // No fields to update
-            const [rows] = await db.query<(About & RowDataPacket)[]>('SELECT * FROM about WHERE id = 1');
+            const [rows] = await db.query('SELECT * FROM about WHERE id = 1');
             res.json(rows[0] || {});
         }
     } catch (error) {
@@ -102,7 +102,7 @@ router.put('/', upload.single('image'), async (req, res) => {
 router.post('/init', async (req, res) => {
     try {
         // Check if about record exists
-        const [existing] = await db.query<(About & RowDataPacket)[]>('SELECT id FROM about LIMIT 1');
+        const [existing] = await db.query('SELECT id FROM about LIMIT 1');
         if (existing && existing.length > 0) {
             return res.status(400).json({ error: 'About record already exists' });
         }
@@ -120,7 +120,7 @@ router.post('/init', async (req, res) => {
             [initialData.name, initialData.title, initialData.content, initialData.skills]
         );
 
-        const [rows] = await db.query<(About & RowDataPacket)[]>('SELECT * FROM about WHERE id = 1');
+        const [rows] = await db.query('SELECT * FROM about WHERE id = 1');
         res.json(rows[0]);
     } catch (error) {
         console.error('Error creating initial about record:', error);
