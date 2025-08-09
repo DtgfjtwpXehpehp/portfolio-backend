@@ -10,7 +10,7 @@ const port = process.env.PORT;
 
 // Middleware
 app.use(cors({
-    origin: [ process.env.FRONTEND_URL || 'http://localhost:5173'],
+    origin: ['http://localhost:3000', process.env.FRONTEND_URL || 'https://sivuyilemtwetwe.co.za'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -31,7 +31,3 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
-app.listen("/",()=>{
-    console.log("Welcome to the backend API");
-} )
