@@ -41,11 +41,11 @@ app.use((err, req, res, next) => {
 });
 
 // If running locally (not as serverless), start the server
-if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
-}
+// if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+//   app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+//   });
+// }
 
 // Export a serverless handler for Vercel / serverless platforms
 export default serverless(app);
