@@ -46,3 +46,23 @@ app.listen(port, () => {
 app.listen("/api",()=>{
     console.log("Welcome to the API");
 })
+
+// api/index.ts
+// import express from 'express';
+import serverless from 'serverless-http';
+
+// const app = express();
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello from Express + TypeScript on Vercel!' });
+});
+
+// export default serverless(app);
+
+
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+export default (req: VercelRequest, res: VercelResponse) => {
+  res.status(200).json({ message: 'Hello from TypeScript API!' });
+};
+
