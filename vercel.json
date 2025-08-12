@@ -1,24 +1,11 @@
 {
-    "version":2,
-    "builds":[
-        {
-            "src":"index.ts",
-            "use":"@vercel/node"
-        }
-    ],
-    "routes":[
-        {
-            "src":"/(.*)",
-            "dest":"index.ts"
-        }
-    ]
+  "version": 2,
+  "functions": {
+    "index.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "index.js" }
+  ]
 }
-
-
-
-
-
-
-
-
-
