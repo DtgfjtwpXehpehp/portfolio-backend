@@ -7,11 +7,11 @@ import documentRoutes from "./documentsRoutes"
 
 const router = express.Router();
 
-router.use('/', projectRoutes);
-router.use('/', aboutRoutes);
-router.use('/', contactRoutes);
-router.use('/', resumeRoutes);
-router.use("/", documentRoutes)
+router.use('/projects', projectRoutes);
+router.use('/about', aboutRoutes);
+router.use('/contact', contactRoutes);
+router.use('/resume', resumeRoutes);
+router.use("/documents", documentRoutes)
 
 
 export default router;
