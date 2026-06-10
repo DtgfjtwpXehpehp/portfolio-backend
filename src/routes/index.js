@@ -16,6 +16,3 @@ router.use('/contact', contactRoutes_1.default);
 router.use('/resume', resumeRoutes_1.default);
 router.use("/documents", documentsRoutes_1.default);
 exports.default = router;
-
-
-export default router

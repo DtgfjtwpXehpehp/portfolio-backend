@@ -9,6 +9,3 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 exports.supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseAnonKey);
 exports.default = exports.supabase;
-
-
-export default exports
