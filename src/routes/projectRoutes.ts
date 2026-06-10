@@ -1,13 +1,18 @@
 import express from 'express';
-import db from '../config/database';
+import supabase from '../config/database';
 
 const router = express.Router();
 
 // Get all projects
 router.get('/', async (req, res) => {
     try {
-        const [projects] = await db.query('SELECT * FROM projects');
-        res.json(projects);
+        const { data, error } = await supabase
+            .from('projects')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching projects' });
     }
@@ -16,11 +21,17 @@ router.get('/', async (req, res) => {
 // Get a single project
 router.get('/:id', async (req, res) => {
     try {
-        const [project] = await db.query('SELECT * FROM projects WHERE id = ?', [req.params.id]);
-        if (Array.isArray(project) && project.length === 0) {
+        const { data, error } = await supabase
+            .from('projects')
+            .select('*')
+            .eq('id', req.params.id)
+            .maybeSingle();
+
+        if (error) throw error;
+        if (!data) {
             return res.status(404).json({ error: 'Project not found' });
         }
-        res.json(project[0]);
+        res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching project' });
     }

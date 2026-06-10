@@ -1,12 +1,18 @@
 import express from 'express';
-import db from '../config/database';
+import supabase from '../config/database';
 
 const router = express.Router();
 
 router.get('/skills', async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT id, name, category, icon FROM skills ORDER BY FIELD(category, \'frontend\', \'backend\', \'database\', \'devops\', \'uiux\'), name');
-        res.json(rows);
+        const { data, error } = await supabase
+            .from('skills')
+            .select('id, name, category, icon')
+            .order('category', { ascending: true })
+            .order('name', { ascending: true });
+
+        if (error) throw error;
+        res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Error fetching skills' });
     }
