@@ -17,6 +17,20 @@ const multer_1 = __importDefault(require("multer"));
 const cloudinary_1 = __importDefault(require("../config/cloudinary"));
 const database_1 = __importDefault(require("../config/database"));
 const router = express_1.default.Router();
+// Debug endpoint to test database connection
+router.get('/debug', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { data, error } = yield database_1.default.from('about').select('count', { count: 'exact', head: true });
+        res.json({
+            connected: !error,
+            error: (error === null || error === void 0 ? void 0 : error.message) || null,
+            url: process.env.VITE_SUPABASE_URL ? 'set' : 'missing'
+        });
+    }
+    catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+}));
 // Configure multer for memory storage
 const upload = (0, multer_1.default)({
     storage: multer_1.default.memoryStorage(),
@@ -32,12 +46,20 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .select('*')
             .limit(1)
             .maybeSingle();
-        if (error)
+        if (error) {
+            console.error('Supabase error:', error);
             throw error;
+        }
         res.json(data || {});
     }
     catch (error) {
-        res.status(500).json({ error: 'Error fetching about information' });
+        console.error('Error fetching about:', error);
+        if (error instanceof Error) {
+            res.status(500).json({ error: `Error fetching about information: ${error.message}` });
+        }
+        else {
+            res.status(500).json({ error: 'Error fetching about information' });
+        }
     }
 }));
 // Update about information with image upload

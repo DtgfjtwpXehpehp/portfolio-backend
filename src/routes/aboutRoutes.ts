@@ -5,6 +5,20 @@ import supabase from '../config/database';
 
 const router = express.Router();
 
+// Debug endpoint to test database connection
+router.get('/debug', async (req, res) => {
+    try {
+        const { data, error } = await supabase.from('about').select('count', { count: 'exact', head: true });
+        res.json({
+            connected: !error,
+            error: error?.message || null,
+            url: process.env.VITE_SUPABASE_URL ? 'set' : 'missing'
+        });
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+});
+
 // Configure multer for memory storage
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -22,10 +36,18 @@ router.get('/', async (req, res) => {
             .limit(1)
             .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase error:', error);
+            throw error;
+        }
         res.json(data || {});
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching about information' });
+        console.error('Error fetching about:', error);
+        if (error instanceof Error) {
+            res.status(500).json({ error: `Error fetching about information: ${error.message}` });
+        } else {
+            res.status(500).json({ error: 'Error fetching about information' });
+        }
     }
 });
 
