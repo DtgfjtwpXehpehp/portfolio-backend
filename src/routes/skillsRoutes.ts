@@ -3,7 +3,7 @@ import supabase from '../config/database';
 
 const router = express.Router();
 
-router.get('/skills', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('skills')
